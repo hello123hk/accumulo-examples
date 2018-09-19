@@ -1,0 +1,30 @@
+#! /usr/bin/env bash
+
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#org.apache.accumulo.examples.client.RandomBatchWriter
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# For debugging run this script like so:
+# RUNEX_MVN_ARG="-X" ./bin/runex client.RandomBatchScanner
+mvn_arg="${RUNEX_MVN_ARG:--q}"
+
+main_class="$1"
+main_args="${*:2}"
+
+if command -v accumulo > /dev/null 2>&1 ; then
+  av_arg="-Daccumulo.version=`accumulo version | tail -n 1`"
+fi
+
+mvn $mvn_arg exec:java -Dlog4j.configuration="file:./conf/log4j.properties" -Dexec.mainClass="org.apache.accumulo.examples.$main_class" $av_arg -Dexec.args="$main_args"
+
